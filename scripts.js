@@ -19,6 +19,7 @@ const topmargin = 50;
 const rows = 3;
 const columns = 5;
 const gap = 20;
+let totalBricks = rows * columns;
 
 let bricks = [];
 
@@ -116,6 +117,9 @@ function keyDown(e) {
     movePlatformRight();
   } else if (e.key === "ArrowLeft" || e.key === "Left") {
     movePlatformLeft();
+  } else if (e.key === " " || e.key === "Spacebar") {
+    gameStarted = true;
+    document.getElementById("startText").style.display = "none";
   }
 }
 
@@ -180,6 +184,7 @@ function brickCollision() {
           b.status = false;
           ball.dy = -ball.dy;
           score += scoreUnit;
+          totalBricks -= 1;
         }
       }
     }
@@ -200,21 +205,27 @@ function moveBall() {
   detectCollisionForBall();
 }
 
-function mouseDown(e) {
-  gameStarted = true;
-}
-
 function showGameStatus() {
   ctx.font = "20px Arial";
   ctx.fillText(`Score: ${score}`, 20, 20);
   ctx.fillText(`Lives: ${lives}`, canvas.width - 100, 20);
 }
 
+function checkWin() {
+  if (totalBricks == 0) {
+    document.getElementById("win").style.display = "block";
+    setTimeout(() => {
+      gameStarted = false;
+      GAME_OVER = true;
+    }, 1000);
+  }
+}
+
 function gameOver() {
   if (lives <= 0) {
     GAME_OVER = true;
     gameStarted = false;
-    console.log("game over");
+    document.getElementById("lose").style.display = "block";
   }
 }
 
@@ -226,6 +237,7 @@ function update() {
   showGameStatus();
   movePaddle();
   moveBall();
+  checkWin();
   gameOver();
   if (!GAME_OVER) {
     requestAnimationFrame(update);
@@ -236,6 +248,27 @@ update();
 
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
-document.addEventListener("click", mouseDown);
 
-console.log(bricks);
+document.getElementById("restart").addEventListener("click", restart);
+document.getElementById("playAgain").addEventListener("click", function () {
+  paddle.x = (canvas.width - 100) / 2;
+  ball.x = canvas.width / 2;
+  ball.y = paddle.y - ballRadius;
+  restart();
+});
+
+function restart() {
+  gameStarted = false;
+  GAME_OVER = false;
+  score = 0;
+  lives = 3;
+  totalBricks = rows * columns;
+  document.getElementById("win").style.display = "none";
+  document.getElementById("lose").style.display = "none";
+  document.getElementById("startText").style.display = "block";
+  bricks = [];
+  createBricks();
+  update();
+}
+
+console.log(gameStarted);

@@ -17,3 +17,19 @@ margin: 0;
 #canvas {
 background: #f0f0f0;
 }
+
+.lose{
+    display: none;
+    position: absolute;
+    top: 50%;
+    color: #000;
+    z-index: 1000;
+}
+
+.win{
+    display: none;
+    position: absolute;
+    top: 50%;
+    color: #000;
+    z-index: 1000;
+}

@@ -1,6 +1,26 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+//wall hit sound
+const wallSound = new Audio();
+wallSound.src = "./sounds/wall.mp3";
+
+//paddle hit sound
+const paddleSound = new Audio();
+paddleSound.src = "./sounds/paddle_hit.mp3";
+
+//brick hit sound
+const brickSound = new Audio();
+brickSound.src = "./sounds/brick_hit.mp3";
+
+//life lost sound
+const lifeLost = new Audio();
+lifeLost.src = "./sounds/life_lost.mp3";
+
+//win sound
+const winSound = new Audio();
+winSound.src = "./sounds/win.mp3";
+
 let score = 0;
 const scoreUnit = 5;
 let lives = 3;
@@ -144,12 +164,15 @@ function reset() {
 
 function wallCollision() {
   if (ball.x - ball.r < 0 || ball.x + ball.r > canvas.width) {
+    wallSound.play();
     ball.dx *= -1;
   }
   if (ball.y - ball.r < 0) {
+    wallSound.play();
     ball.dy *= -1;
   }
   if (ball.y + ball.r > canvas.height) {
+    lifeLost.play();
     lives--;
     reset();
   }
@@ -162,6 +185,7 @@ function paddleCollision() {
     ball.x + ball.r > paddle.x &&
     ball.x - ball.r < paddle.x + paddle.w
   ) {
+    paddleSound.play();
     let collidepoint = ball.x - (paddle.x + paddle.w / 2);
     collidepoint = collidepoint / (paddle.w / 2); //normalizing to -1 to 1
     let angle = collidepoint * (Math.PI / 3);
@@ -181,6 +205,7 @@ function brickCollision() {
           ball.y + ball.r > b.y &&
           ball.y - ball.r < b.y + brick.h
         ) {
+          brickSound.play();
           b.status = false;
           ball.dy = -ball.dy;
           score += scoreUnit;
@@ -213,6 +238,7 @@ function showGameStatus() {
 
 function checkWin() {
   if (totalBricks == 0) {
+    winSound.play();
     document.getElementById("win").style.display = "block";
     setTimeout(() => {
       gameStarted = false;

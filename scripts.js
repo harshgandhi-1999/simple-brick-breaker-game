@@ -272,6 +272,9 @@ function update() {
 
 update();
 
+document.addEventListener("click", function () {
+  gameStarted = true;
+});
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
 

@@ -277,6 +277,17 @@ document.addEventListener("click", function () {
 });
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
+document.addEventListener("mousemove", function (e) {
+  if (gameStarted === true) {
+    var relativeX = e.clientX - canvas.offsetLeft;
+    if (
+      relativeX - paddle.w / 2 >= 0 &&
+      relativeX + paddle.w / 2 <= canvas.width
+    ) {
+      paddle.x = relativeX - paddle.w / 2;
+    }
+  }
+});
 
 document.getElementById("restart").addEventListener("click", restart);
 document.getElementById("playAgain").addEventListener("click", function () {
@@ -299,5 +310,3 @@ function restart() {
   createBricks();
   update();
 }
-
-console.log(gameStarted);

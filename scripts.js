@@ -277,7 +277,7 @@ document.addEventListener("click", function () {
 });
 document.addEventListener("keydown", keyDown);
 document.addEventListener("keyup", keyUp);
-document.addEventListener("mousemove", function (e) {
+document.addEventListener("touchmove mousemove", function (e) {
   if (gameStarted === true) {
     var relativeX = e.clientX - canvas.offsetLeft;
     if (
